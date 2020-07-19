@@ -2,8 +2,8 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from data_sets import DSpritesDataset
-from data_transforms import DSpritesToTensor
+from .data_sets import DSpritesDataset
+from .data_transforms import DSpritesToTensor
 
 
 def get_dSprite_loader(npz_file, batch_size, num_workers, shuffle=True):

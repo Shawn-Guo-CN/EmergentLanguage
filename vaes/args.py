@@ -29,7 +29,7 @@ def get_dsprites_betavae_args():
     parser.add_argument('--save_step', default=10000, type=int, help='number of iterations after which a checkpoint is saved')
 
     parser.add_argument('--ckpt_dir', default='data/checkpoints', type=str, help='checkpoint directory')
-    parser.add_argument('--ckpt_name', default='last', type=str, help='load previous checkpoint. insert checkpoint filename')
+    parser.add_argument('--ckpt_name', default='dsprites_betavae', type=str, help='load previous checkpoint. insert checkpoint filename')
 
     args = parser.parse_args()
 

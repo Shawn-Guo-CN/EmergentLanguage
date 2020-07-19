@@ -9,6 +9,10 @@ from torch.autograd import Variable
 from encoders import DspriteImgCNNEncoder
 from decoders import DspriteImgCNNDecoder
 from utils import reparameterise, reconstruction_loss, kl_divergence
+
+# TODO: fix the absolute import below
+import sys
+sys.path.insert(0,'E:\\GitWS\\EmergentLanguage\\')
 from data_loader import get_dSprite_loader
 
 
@@ -44,7 +48,6 @@ class DspritesBetaVAETrainer(object):
         self.gamma = args.gamma
         self.C_max = args.C_max
         self.C_stop_iter = args.C_stop_iter
-        self.model = args.model
         self.lr = args.lr
         self.beta1 = args.beta1
         self.beta2 = args.beta2
@@ -52,23 +55,17 @@ class DspritesBetaVAETrainer(object):
         self.decoder_dist = 'bernoulli'
 
         self.model = DspritesVAE(self.z_dim).to(self.device)
-        self.optim = optim.Adam(self.net.parameters(), lr=self.lr, betas=(self.beta1, self.beta2))
+        self.optim = optim.Adam(self.model.parameters(), lr=self.lr, betas=(self.beta1, self.beta2))
 
-        self.ckpt_dir = os.path.join(args.ckpt_dir, args.viz_name)
+        self.ckpt_dir = os.path.join(args.ckpt_dir)
         if not os.path.exists(self.ckpt_dir):
             os.makedirs(self.ckpt_dir, exist_ok=True)
         self.ckpt_name = args.ckpt_name
         if self.ckpt_name is not None:
             self.load_checkpoint(self.ckpt_name)
 
-        self.save_output = args.save_output
-        self.output_dir = os.path.join(args.output_dir, args.viz_name)
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir, exist_ok=True)
-
-        self.gather_step = args.gather_step
-        self.display_step = args.display_step
         self.save_step = args.save_step
+        self.display_step = args.display_step
 
         self.npz_file = args.npz_file
         self.batch_size = args.batch_size
@@ -99,9 +96,9 @@ class DspritesBetaVAETrainer(object):
                 beta_vae_loss.backward()
                 self.optim.step()
 
-                if self.global_iter%self.display_step == 0:
+                if self.global_iter % self.display_step == 0:
                     pbar.write('[{}] recon_loss:{:.3f} total_kld:{:.3f} mean_kld:{:.3f}'.format(
-                        self.global_iter, recon_loss.data[0], total_kld.data[0], mean_kld.data[0]))
+                        self.global_iter, recon_loss.item(), total_kld.item(), mean_kld.item()))
 
                     var = logvar.exp().mean(0).data
                     var_str = ''

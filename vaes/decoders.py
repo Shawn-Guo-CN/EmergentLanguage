@@ -32,7 +32,7 @@ class DspriteImgCNNDecoder(nn.Module):
         self.weight_init()
 
     def forward(self, x):
-        return self.encoder(x)
+        return self.decoder(x)
 
     def weight_init(self):
         for block in self._modules:

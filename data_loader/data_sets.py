@@ -21,20 +21,26 @@ class DSpritesDataset(Dataset):
         self.transform = transform
 
     def __len__(self):
-        return self.dataset['imgs'].shape[0]
+        return self.dataset['images'].shape[0]
 
     def __getitem__(self, idx):
-        img = self.dataset['imgs'][idx]
+        image = self.dataset['images'][idx]
         latents_class = self.dataset['latents_classes'][idx]
         latents_value = self.dataset['latents_values'][idx]
-        return img, latents_class, latents_value
+
+        sample = (image, latents_class, latents_value)
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample
 
     @staticmethod
     def preprocess_zip(data_zip):
         # TODO: filter out the data we do not need in the future
 
         return {
-            'imgs': data_zip['imgs'],
+            'images': data_zip['imgs'],
             'latents_classes': data_zip['latents_values'],
             'latents_values': data_zip['latents_values']
         }

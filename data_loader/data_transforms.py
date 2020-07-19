@@ -1,7 +1,7 @@
 import torch
 
 
-class ToTensor(object):
+class DSpritesToTensor(object):
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):

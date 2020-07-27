@@ -1,5 +1,5 @@
-from args import get_dsprites_betavae_args
-from models import DspritesBetaVAETrainer
+from .args import get_dsprites_betavae_args
+from .models import DspritesBetaVAETrainer
 
 
 def train_dSprites_betavae():

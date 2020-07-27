@@ -1,6 +1,6 @@
 import argparse
 
-from utils import str2bool
+from .utils import str2bool
 
 
 def get_dsprites_betavae_args():
@@ -27,7 +27,7 @@ def get_dsprites_betavae_args():
     parser.add_argument('--num_workers', default=0, type=int, help='dataloader num_workers')
 
     parser.add_argument('--save_step', default=10000, type=int, help='number of iterations after which a checkpoint is saved')
-    parser.add_argument('--display_step', default=10, type=int, help='number of iterations after which loss data is printed')
+    parser.add_argument('--display_step', default=10000, type=int, help='number of iterations after which loss data is printed')
 
     parser.add_argument('--ckpt_dir', default='data/checkpoints', type=str, help='checkpoint directory')
     parser.add_argument('--ckpt_name', default='dsprites_betavae', type=str, help='load previous checkpoint. insert checkpoint filename')

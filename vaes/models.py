@@ -6,14 +6,11 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 
-from encoders import DspriteImgCNNEncoder
-from decoders import DspriteImgCNNDecoder
-from utils import reparameterise, reconstruction_loss, kl_divergence
+from .encoders import DspriteImgCNNEncoder
+from .decoders import DspriteImgCNNDecoder
+from .utils import reparameterise, reconstruction_loss, kl_divergence
 
-# TODO: fix the absolute import below
-import sys
-sys.path.insert(0,'E:\\GitWS\\EmergentLanguage\\')
-from data_loader import get_dSprite_loader
+from ..data_loader import get_dSprite_loader
 
 
 

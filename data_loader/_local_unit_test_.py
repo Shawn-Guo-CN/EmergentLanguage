@@ -1,4 +1,4 @@
-from data_loaders import get_dSprite_loader
+from .data_loaders import get_dSprite_loader
 
 
 def test_dSprite_loader():

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from utils import View, kaiming_init
+from .utils import View, kaiming_init
 
 
 class BaseEncoder(nn.Module):

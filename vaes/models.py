@@ -13,7 +13,6 @@ from .utils import reparameterise, reconstruction_loss, kl_divergence
 from ..data_loader import get_dSprite_loader
 
 
-
 class DspritesVAE(nn.Module):
     """Model proposed in understanding beta-VAE paper(Burgess et al, arxiv:1804.03599, 2018)."""
 

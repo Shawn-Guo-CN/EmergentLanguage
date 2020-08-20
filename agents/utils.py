@@ -36,6 +36,7 @@ class Configurations:
     dropout_ratio = 0.8
     tau = 1.0 # tau for GUMBLE trick
     msg_mode = 'GUMBEL' # options: GUMBEL, REINFORCE, SCST, SOFTMAX
+    max_msg_len = 4 # maximum length of the messages
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 

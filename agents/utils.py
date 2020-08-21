@@ -32,6 +32,9 @@ def decoding_sampler(logits, mode, tau=1, hard=False, dim=-1):
 
 @dataclass
 class Configurations:
+    """
+    Default parameters for modules in package 'agents'.
+    """
     hidden_size = 256
     dropout_ratio = 0.8
     tau = 1.0 # tau for GUMBLE trick

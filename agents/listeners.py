@@ -67,10 +67,7 @@ class BaseReconListener(nn.Module, ABC):
         encoder_hidden = encoder_hidden.squeeze(0)
         encoder_cell = encoder_cell.squeeze(0)
 
-        recons = self.decoder(
-            encoder_hidden,
-            encoder_cell
-        )
+        recons = self.decoder(encoder_hidden, encoder_cell)
 
         return recons
 

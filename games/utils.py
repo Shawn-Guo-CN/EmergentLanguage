@@ -12,5 +12,7 @@ class Configurations(object):
     """
     optimiser = optim.Adam
     learning_rate = 1e-3
+    tau = 1.0 # hyper-param for Gumbel trick
+    clip = 50.0
 
 args = Configurations()

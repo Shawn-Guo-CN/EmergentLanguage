@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod, abstractstaticmethod
 from .utils import args
 
+import torch.nn as nn
+
 
 class BaseGame(ABC):
     def __init__(self, 
@@ -22,8 +24,58 @@ class BaseGame(ABC):
         self.data_loader = data_loader
         self.speaker, self.listener = self._init_agents()
         self.speaker_optimiser = optimiser(self.speaker.parameters(), lr=learning_rate)
-        self.listenre_optimiser = optimiser(self.listener.parameters(), lr=learning_rate)
+        self.listener_optimiser = optimiser(self.listener.parameters(), lr=learning_rate)
+
+    def train_epoch(self, data_batch, tau=args.tau, clip=args.clip):
+
+        self.speaker_optimiser.zero_grad()
+        self.listener_optimiser.zero_grad()
+
+        loss, print_loss, acc, c_correct, log_msg_prob, log_choose_prob,\
+             baseline, spk_entropy = model(data_batch, tau)
+
+        # different backpropogation method for different tricks
+        if args.msg_mode == 'REINFORCE':
+            (c_correct.detach() * log_msg_prob + 0.05 * spk_entropy).mean().backward()
+            (c_correct.detach() * log_choose_prob).mean().backward()
+        elif args.msg_mode == 'SCST':
+            ((c_correct.detach()-baseline.detach()) * log_msg_prob).mean().backward()
+            ((c_correct.detach()-baseline.detach()) * log_choose_prob).mean().backward()
+        elif args.msg_mode == 'GUMBEL':
+            loss.mean().backward()
+        else:
+            raise NotImplementedError
         
+        nn.utils.clip_grad_norm_(model.parameters(), clip)
+        self.speaker_optimiser.step()
+        self.listener_optimiser.step()
+
+        return acc, print_loss
+
+        m_optimizer.zero_grad()
+        s_optimizer.zero_grad()
+        l_optimizer.zero_grad()
+
+        loss, log_msg_prob, log_seq_prob, baseline, print_losses, \
+            seq_correct, tok_acc, seq_acc , _, s_entropy = model(data_batch, tau)
+
+        if args.msg_mode == 'REINFORCE':
+            log_msg_prob = (-seq_correct.detach() * log_msg_prob).mean()
+            log_msg_prob.backward()
+            log_seq_prob = (-seq_correct.detach() * log_seq_prob).mean()
+            log_seq_prob.backward()
+        elif args.msg_mode == 'SCST':
+            log_msg_prob = ((loss.detach() - baseline.detach()) * log_msg_prob).mean()
+            log_msg_prob.backward()
+        elif args.msg_mode == 'GUMBEL':
+            loss.mean().backward()
+    
+        nn.utils.clip_grad_norm_(model.parameters(), clip)
+        m_optimizer.step()
+        s_optimizer.step()
+        l_optimizer.step()
+
+        return seq_acc, tok_acc, sum(print_losses) / len(print_losses)
 
     @abstractmethod
     def train(self):
